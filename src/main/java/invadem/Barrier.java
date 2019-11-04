@@ -26,6 +26,9 @@ public class Barrier {
 
     //-----------------------------------------------------------
     //Properties/Getter-Setters
+    public BarrierPart[] GetBarrierParts() {
+        return barrierParts;
+    }
 
     //-----------------------------------------------------------
     //Methods

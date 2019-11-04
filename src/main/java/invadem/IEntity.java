@@ -12,6 +12,8 @@ public interface IEntity extends IHittable {
 
     public Vector2 GetSize();
 
+    public boolean IsDead();
+
     public void Render();
 
     public void Update();

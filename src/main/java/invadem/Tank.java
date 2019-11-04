@@ -21,8 +21,6 @@ public class Tank implements IEntity, IMoveable {
 
     private PImage sprite;
 
-    private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-
     //-----------------------------------------------------------
     //Properties/Getter-Setters
     public Type GetEntityType() {
@@ -37,26 +35,27 @@ public class Tank implements IEntity, IMoveable {
 
     public Vector2 GetSize() { return size; }
 
+    public boolean IsDead() { return dead; }
+
     //-----------------------------------------------------------
     //Methods
     public void Update() {
         if (!dead) {
             Render();
-            for (Bullet b : bullets) {
-                b.Update();
-            }
         }
     }
 
     public void Move(int x, int y) {
-        pos.x += x;
-        pos.y += y;
+        if (!dead) {
+            pos.x += x;
+            pos.y += y;
 
-        //Preventing ship from going out of bounds
-        if (pos.x < 0) {
-            pos.x = 0;
-        } else if (pos.x > 480) {
-            pos.x = 480;
+            //Preventing ship from going out of bounds
+            if (pos.x < 0) {
+                pos.x = 0;
+            } else if (pos.x > 640) {
+                pos.x = 640;
+            }
         }
     }
 
@@ -65,6 +64,7 @@ public class Tank implements IEntity, IMoveable {
         if (hp <= 0) {
             dead = true;
             hp = 0;
+            App.GetInstance().GameOver();
         }
     }
 
@@ -74,10 +74,6 @@ public class Tank implements IEntity, IMoveable {
     }
 
     public void Shoot() {
-        bullets.add(new Bullet(new Vector2(pos.x, pos.y + size.y/2), this));
-    }
-
-    public void RemoveBullet(Bullet b) {
-        bullets.remove(b);
+        App.GetInstance().GetBullets().add(new Bullet(new Vector2(pos.x, pos.y - size.y/2), this, new Vector2(0, -1)));
     }
 }

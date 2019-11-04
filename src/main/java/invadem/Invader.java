@@ -40,12 +40,15 @@ public class Invader implements IEntity, IMoveable {
 
     public Vector2 GetSize() { return size; }
 
+    public boolean IsDead() { return dead; }
+
     //-----------------------------------------------------------
     //Methods
     public void Update() {
         if (!dead) {
             MovementAI();
             Render();
+            CheckIfBarriersReached();
         }
     }
 
@@ -105,8 +108,17 @@ public class Invader implements IEntity, IMoveable {
         }
     }
 
-    public void Hit(int damage) {
+    private void CheckIfBarriersReached() {
+        if (pos.y >= 394 && !dead) {
+            App.GetInstance().GameOver();
+        }
+    }
 
+    public void Hit(int damage) {
+        healthPoints -= damage;
+        if (healthPoints <= 0) {
+            dead = true;
+        }
     }
 
     public void Move(int x, int y) {
@@ -117,5 +129,9 @@ public class Invader implements IEntity, IMoveable {
     public void Render() {
         App.GetInstance().imageMode(PConstants.CENTER);
         App.GetInstance().image(sprites[animationIndex], pos.x, pos.y);
+    }
+
+    public void Shoot() {
+        App.GetInstance().GetBullets().add(new Bullet(new Vector2(pos.x, pos.y - size.y/2), this, new Vector2(0, 1)));
     }
 }

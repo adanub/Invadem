@@ -18,7 +18,7 @@ public class BarrierPart implements IEntity {
     private boolean dead = false;
 
     private PImage[] sprites;
-    private int animationIndex;
+    private int animationIndex = 0;
 
     //-----------------------------------------------------------
     //Properties/Getter-Setters
@@ -34,6 +34,8 @@ public class BarrierPart implements IEntity {
 
     public Vector2 GetSize() { return size; }
 
+    public boolean IsDead() { return dead; }
+
     //-----------------------------------------------------------
     //Methods
     public void Update() {
@@ -43,11 +45,26 @@ public class BarrierPart implements IEntity {
     }
 
     public void Hit(int damage) {
+        hp -= damage;
+        switch (hp) {
+            case 3:
+                animationIndex = 0;
+                break;
+            case 2:
+                animationIndex = 1;
+                break;
+            case 1:
+                animationIndex = 2;
+                break;
+        }
 
+        if (hp <= 0) {
+            dead = true;
+        }
     }
 
     public void Render() {
         App.GetInstance().imageMode(PConstants.CENTER);
-        App.GetInstance().image(sprites[0], pos.x, pos.y);
+        App.GetInstance().image(sprites[animationIndex], pos.x, pos.y);
     }
 }
