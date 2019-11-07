@@ -60,7 +60,7 @@ public class Tank implements IEntity, IMoveable {
     }
 
     public void Hit(int damage) {
-        hp -= 1;
+        hp -= damage;
         if (hp <= 0) {
             dead = true;
             hp = 0;
@@ -69,11 +69,15 @@ public class Tank implements IEntity, IMoveable {
     }
 
     public void Render() {
-        App.GetInstance().imageMode(PConstants.CENTER);
-        App.GetInstance().image(sprite, pos.x, pos.y);
+        if (!App.Testing) {
+            App.GetInstance().imageMode(PConstants.CENTER);
+            App.GetInstance().image(sprite, pos.x, pos.y);
+        }
     }
 
-    public void Shoot() {
-        App.GetInstance().GetBullets().add(new Bullet(new Vector2(pos.x, pos.y - size.y/2), this, new Vector2(0, -1)));
+    public Bullet Shoot() {
+        Bullet b = new Bullet(new Vector2(pos.x, pos.y - size.y/2), this, new Vector2(0, -1), Bullet.BulletType.NORMAL);
+        App.GetInstance().GetBullets().add(b);
+        return b;
     }
 }

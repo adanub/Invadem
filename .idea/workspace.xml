@@ -2,16 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a58dc143-4f17-4395-9bdd-38fd131d5649" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/invadem/ExtensionTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Invadem Report.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Invadem Report.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/invadem/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/invadem/Barrier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/Barrier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/invadem/BarrierPart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/BarrierPart.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/invadem/Bullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/Bullet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/invadem/Collisions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/Collisions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/invadem/IEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/IEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/invadem/Invader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/Invader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/invadem/Tank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/Tank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/invadem/Vector2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/invadem/Vector2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/invadem/BarrierTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/invadem/BarrierTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/invadem/InvaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/invadem/InvaderTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/invadem/ProjectileTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/invadem/ProjectileTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/invadem/TankTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/invadem/TankTest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +85,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

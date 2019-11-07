@@ -6,46 +6,51 @@ import static org.junit.Assert.*;
 
 public class InvaderTest {
 
-//    @Test
-//    public void testInvaderConstruction() {
-//        Invader inv = /* Your Constructor Here */
-//        assertNotNull(inv);
+    @Test
+    public void testInvaderConstruction() {
+        App.Testing = true;
+        Invader inv = new Invader(Invader.InvaderType.NORMAL, new Vector2(0, 0), null);
+        assertNotNull(inv);
+    }
 
-//    }
+    @Test
+    public void testInvaderFireProjectile() {
+        App.Testing = true;
+        App app = new App();
+        Invader inv = new Invader(Invader.InvaderType.NORMAL, new Vector2(0, 0), null);
+        assertNotNull(inv.Shoot());
+    }
 
-//    @Test
-//    public void testInvaderFireProjectile() {
-//        Invader inv = /* Your Constructor Here */
-//        assertNotNull(inv.fire());
-//    }
+    @Test
+    public void testInvaderIsNotDead() {
+        App.Testing = true;
+        Invader inv = new Invader(Invader.InvaderType.NORMAL, new Vector2(0, 0), null);
+        assertEquals(false, inv.IsDead());
+    }
 
-//    @Test
-//    public void testInvaderIsNotDead() {
-//        Invader inv = /* Your Constructor Here */
-//        assertEquals(false, inv.isDead());
-//    }
+    @Test
+    public void testInvaderIsDead() {
+        App.Testing = true;
+        Invader inv = new Invader(Invader.InvaderType.NORMAL, new Vector2(0, 0), null);
+        inv.Hit(1);
+        assertEquals(true, inv.IsDead());
+    }
 
-//    @Test
-//    public void testInvaderIsDead() {
-//        Invader inv = /* Your Constructor Here */
-//        inv.hit();
-//        assertEquals(true, inv.isDead());
-//    }
+    @Test
+    public void testInvaderIntersectWithPlayerProjectile() {
+        App.Testing = true;
+        Invader inv = new Invader(Invader.InvaderType.NORMAL, new Vector2(0, 0), null);
+        Tank tank = new Tank(3, null);
+        Bullet proj = new Bullet(new Vector2(0, 0), tank, null, Bullet.BulletType.NORMAL);
+        assertTrue(Collisions.Check(proj, inv));
+    }
 
-//    @Test
-//    public void testInvaderIntersectWithPlayerProjectile() {
-//        Invader inv = /* Your Constructor Here */
-//        Projectile proj = /* Your Constructor Here */
-//        assertTrue(proj.intersect(inv));
-
-//    }
-
-//    @Test
-//    public void testInvaderIntersectWithPlayerProjectile() {
-//        Invader inv = /* Your Constructor Here */
-//        Projectile proj = /* Your Constructor Here */
-//        assertFalse(proj.intersect(inv));
-
-//    }
-
+    @Test
+    public void testInvaderDoesNotIntersectWithPlayerProjectile() {
+        App.Testing = true;
+        Invader inv = new Invader(Invader.InvaderType.NORMAL, new Vector2(0, 0), null);
+        Tank tank = new Tank(3, null);
+        Bullet proj = new Bullet(new Vector2(200, 200), tank, null, Bullet.BulletType.NORMAL);
+        assertFalse(Collisions.Check(proj, inv));
+    }
 }

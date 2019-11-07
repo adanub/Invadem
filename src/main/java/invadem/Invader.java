@@ -6,16 +6,39 @@ import java.lang.Math;
 
 public class Invader implements IEntity, IMoveable {
 
-    public Invader(int healthPoints, Vector2 pos, PImage[] sprites) {
-        this.healthPoints = healthPoints;
+    public Invader(InvaderType invaderType, Vector2 pos, PImage[] sprites) {
+        switch (invaderType) {
+            case NORMAL:
+                healthPoints = 1;
+                if (!App.Testing) {
+                    this.sprites = new PImage[] { sprites[0], sprites[1] };
+                }
+                break;
+            case POWER:
+                healthPoints = 1;
+                if (!App.Testing) {
+                    this.sprites = new PImage[] { sprites[2], sprites[3] };
+                }
+                break;
+            case ARMOUR:
+                healthPoints = 3;
+                if (!App.Testing) {
+                    this.sprites = new PImage[] { sprites[4], sprites[5] };
+                }
+                break;
+        }
+        this.invaderType = invaderType;
         this.pos = pos.Copy();
-        this.sprites = sprites;
         this.startingPos = pos.Copy();
+    }
+
+    public enum InvaderType {
+        NORMAL, POWER, ARMOUR
     }
 
     //-----------------------------------------------------------
     //Fields
-    public static int movementFrame;
+    private InvaderType invaderType;
     public final Vector2 size = new Vector2(22, 16);
     private Vector2 pos;
     private Vector2 startingPos;
@@ -33,6 +56,8 @@ public class Invader implements IEntity, IMoveable {
     //-----------------------------------------------------------
     //Properties/Getter-Setters
     public Type GetEntityType() { return Type.INVADER; }
+
+    public InvaderType GetInvaderType() { return invaderType; }
 
     public int GetHealthPoints() { return healthPoints; }
 
@@ -127,11 +152,22 @@ public class Invader implements IEntity, IMoveable {
     }
 
     public void Render() {
-        App.GetInstance().imageMode(PConstants.CENTER);
-        App.GetInstance().image(sprites[animationIndex], pos.x, pos.y);
+        if (!App.Testing) {
+            App.GetInstance().imageMode(PConstants.CENTER);
+            App.GetInstance().image(sprites[animationIndex], pos.x, pos.y);
+        }
     }
 
-    public void Shoot() {
-        App.GetInstance().GetBullets().add(new Bullet(new Vector2(pos.x, pos.y - size.y/2), this, new Vector2(0, 1)));
+    public Bullet Shoot() {
+        Bullet b;
+
+        if (invaderType == InvaderType.POWER) {
+            b = new Bullet(new Vector2(pos.x, pos.y - size.y/2), this, new Vector2(0, 1), Bullet.BulletType.POWER);
+        } else {
+            b = new Bullet(new Vector2(pos.x, pos.y - size.y/2), this, new Vector2(0, 1), Bullet.BulletType.NORMAL);
+        }
+
+        App.GetInstance().GetBullets().add(b);
+        return b;
     }
 }

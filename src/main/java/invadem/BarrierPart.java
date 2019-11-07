@@ -64,7 +64,9 @@ public class BarrierPart implements IEntity {
     }
 
     public void Render() {
-        App.GetInstance().imageMode(PConstants.CENTER);
-        App.GetInstance().image(sprites[animationIndex], pos.x, pos.y);
+        if (!App.Testing) {
+            App.GetInstance().imageMode(PConstants.CENTER);
+            App.GetInstance().image(sprites[animationIndex], pos.x, pos.y);
+        }
     }
 }

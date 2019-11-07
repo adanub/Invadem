@@ -1,6 +1,7 @@
 package invadem;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 
@@ -11,6 +12,10 @@ public class App extends PApplet {
     //-----------------------------------------------------------
     //Fields
     private static App instance; //Singleton instance of this class
+    public static boolean Testing = false; //Use while testing to disable rendering
+    public int highScore = 10000;
+    public int currentScore = 0;
+
     private Tank tank;
     private ArrayList<Invader> invaders = new ArrayList<>();
     private ArrayList<Barrier> barriers = new ArrayList<>();
@@ -20,12 +25,13 @@ public class App extends PApplet {
     private int invaderShootDelay = 300; //Number of frames between each invader shot
     private int invaderShootCountdown = 300; //Countdown to the next invader shot
 
-    //Sprites
+    //Sprites and Resources
+    private PFont invademFont;
     private PImage tankSprite;
     private PImage[] barrierSprites;
     private PImage gameOverSprite;
     private PImage nextLevelSprite;
-    private PImage projectileSprite;
+    private PImage[] projectileSprites;
     private PImage[] invaderSprites;
 
     //Input
@@ -51,8 +57,14 @@ public class App extends PApplet {
         }
     }
 
-    public PImage GetProjectileSprite() {
-        return projectileSprite;
+    public PImage GetProjectileSprite(Bullet.BulletType type) {
+        switch(type) {
+            case NORMAL:
+                return projectileSprites[0];
+            case POWER:
+                return projectileSprites[1];
+        };
+        return null;
     }
 
     public Tank GetTank() { return tank; }
@@ -77,7 +89,11 @@ public class App extends PApplet {
 
         invaderSprites = new PImage[] {
                 loadImage("src/main/resources/invader1.png"),
-                loadImage("src/main/resources/invader2.png")
+                loadImage("src/main/resources/invader2.png"),
+                loadImage("src/main/resources/invader1_power.png"),
+                loadImage("src/main/resources/invader2_power.png"),
+                loadImage("src/main/resources/invader1_armoured.png"),
+                loadImage("src/main/resources/invader2_armoured.png")
         };
 
         barrierSprites = new PImage[] {
@@ -99,7 +115,10 @@ public class App extends PApplet {
                 loadImage("src/main/resources/barrier_solid3.png"),
         };
 
-        projectileSprite = loadImage("src/main/resources/projectile.png");
+        projectileSprites = new PImage[] {
+                loadImage("src/main/resources/projectile.png"),
+                loadImage("src/main/resources/projectile_lg.png")
+        };
 
         gameOverSprite = loadImage("src/main/resources/gameover.png");
         nextLevelSprite = loadImage("src/main/resources/nextlevel.png");
@@ -108,6 +127,7 @@ public class App extends PApplet {
     public void setup() {
         frameRate(60);
         LoadSprites();
+        invademFont = createFont("src/main/resources/PressStart2P-Regular.ttf", 12);
     }
 
     public void StartGame() {
@@ -118,11 +138,27 @@ public class App extends PApplet {
         invaders.clear();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 10; j++) {
-                Invader inv = new Invader(
-                        1,
-                        new Vector2(150 + (36 * j), 40 + (36 * i)),
-                        invaderSprites
-                );
+                Invader inv;
+                if (i == 2) {
+                    inv = new Invader(
+                            Invader.InvaderType.POWER,
+                            new Vector2(150 + (36 * j), 40 + (36 * i)),
+                            invaderSprites
+                    );
+                } else if (i == 3) {
+                    inv = new Invader(
+                            Invader.InvaderType.ARMOUR,
+                            new Vector2(150 + (36 * j), 40 + (36 * i)),
+                            invaderSprites
+                    );
+                } else {
+                    inv = new Invader(
+                            Invader.InvaderType.NORMAL,
+                            new Vector2(150 + (36 * j), 40 + (36 * i)),
+                            invaderSprites
+                    );
+                }
+
                 invaders.add(inv);
             }
         }
@@ -145,35 +181,58 @@ public class App extends PApplet {
 
     public void draw() { 
         //Main Game Loop
-        background(1f); //Setting the background to black
+        if (!Testing) { //No rendering in test mode
+            background(1f); //Setting the background to black
+        }
+
         if (gameOverDisplay > 0) {
             if (gameOverDisplay == 120) {
                 StartGame();
             }
-            imageMode(CENTER);
             gameOverDisplay--;
-            image(gameOverSprite, 320, 240);
+            if (!Testing) { //No rendering in test mode
+                imageMode(CENTER);
+                image(gameOverSprite, 320, 240);
+            }
         } else if (nextLevelDisplay > 0) {
             if (nextLevelDisplay == 120) {
                 StartGame();
             }
-            imageMode(CENTER);
             nextLevelDisplay--;
-            image(nextLevelSprite, 320, 240);
+            if (!Testing) { //No rendering in test mode
+                imageMode(CENTER);
+                image(nextLevelSprite, 320, 240);
+            }
         } else {
             UpdateEntities();
+        }
+
+        if (!Testing) { //Displaying score/high-score
+            textFont(invademFont);
+            text("High Score: " + highScore, 12, 18);
+            text("Current Score: " + currentScore, 12, 40);
         }
     }
 
     public void GameOver() {
         gameOverDisplay = 120;
+        invaderShootDelay = 300; //Resetting projectile fire rate
+        if (currentScore > highScore) {
+            highScore = currentScore;
+        }
     }
 
     public void NextLevel() {
         nextLevelDisplay = 120;
+        if (invaderShootDelay > 60) { //Making projectiles fire faster on next level
+            invaderShootDelay -= 60;
+        }
+        if (currentScore > highScore) {
+            highScore = currentScore;
+        }
     }
 
-    private void UpdateEntities() {
+    public void UpdateEntities() {
         //Tank
         tank.Move(GetMovementInput(), 0);
         tank.Update();
@@ -204,6 +263,11 @@ public class App extends PApplet {
 
         //Clean-up
         for (Invader i : deadInvaders) {
+            if (i.GetInvaderType() == Invader.InvaderType.NORMAL) {
+                currentScore += 100;
+            } else {
+                currentScore += 250;
+            }
             invaders.remove(i);
         }
         deadInvaders.clear();
